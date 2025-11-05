@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Design Brief – CSforCA Income vs. Participation Visualization</title>
+  <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+  <style>
+    body {
+      font-family: Inter, sans-serif;
+      margin: 2rem;
+      background-color: #fafafa;
+      color: #222;
+      line-height: 1.6;
+    }
+    h1 {
+      color: #003366;
+    }
+    section {
+      margin-bottom: 2.5rem;
+      padding-bottom: 1.5rem;
+      border-bottom: 1px solid #ccc;
+    }
+    svg {
+      background: white;
+      border: 1px solid #ddd;
+    }
+    .point {
+      opacity: 0.7;
+    }
+  </style>
+</head>
+<body>
+  <h1>Design Brief: Exploring Income, Region, and CS Participation in California</h1>
+
+  <section>
+    <h2>1. Dataset Choice</h2>
+    <p>This visualization uses the <strong>CSforCA K–12 Computer Science Enrollment Dataset (2018–2019)</strong> combined with household income data from <a href="https://data.ca.gov/" target="_blank">data.ca.gov</a>. The merged dataset connects <em>county-level median income</em> and <em>regional classification</em> (coastal, inland, or rural) with <em>CS participation rates</em> to explore whether wealth and geography influence access to computing education.</p>
+  </section>
+
+  <section>
+    <h2>2. Research Question</h2>
+    <p><strong>How do household income and county region (coastal, inland, or rural) relate to CS participation rates in California’s K–12 schools?</strong></p>
+  </section>
+
+  <section>
+    <h2>3. Visual Concept</h2>
+    <p>The design concept is an interactive <strong>scatterplot</strong> comparing <em>median household income</em> (x-axis) to <em>CS participation rate</em> (y-axis). Each point represents a county, color-coded by its region type. Hovering reveals details such as county name, income, and participation rate. Future iterations will allow filtering by gender or race using dropdowns.</p>
+    <svg id="chart" width="600" height="400"></svg>
+  </section>
+
+  <section>
+    <h2>4. Interaction Concept</h2>
+    <ul>
+      <li>Hover tooltips for detailed data per county</li>
+      <li>Dropdown filter by gender or race</li>
+      <li>Brush selection to compare groups (e.g., coastal vs. inland)</li>
+      <li>Zoom/pan to inspect data clusters</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>5. Inspirations</h2>
+    <ul>
+      <li><a href="https://namerology.com/baby-name-grapher/" target="_blank">Namerology Baby Name Grapher</a></li>
+      <li><a href="https://www.benfry.com/zipdecode/" target="_blank">Ben Fry’s ZipDecode</a></li>
+      <li><a href="https://d3js.org/d3-hierarchy" target="_blank">D3 Hierarchy Examples</a></li>
+      <li><a href="https://observablehq.com/framework/data-loaders" target="_blank">Observable Data Loaders</a></li>
+    </ul>
+  </section>
+
+  <script>
+    // --- Minimal example of working data environment ---
+    const svg = d3.select('#chart');
+    const width = +svg.attr('width');
+    const height = +svg.attr('height');
+
+    // Example placeholder dataset (mock counties)
+    const data = [
+      { county: 'Santa Clara', income: 125000, cs_rate: 7.5, region: 'Coastal' },
+      { county: 'Fresno', income: 65000, cs_rate: 2.4, region: 'Inland' },
+      { county: 'Marin', income: 135000, cs_rate: 8.1, region: 'Coastal' },
+      { county: 'Kern', income: 62000, cs_rate: 1.9, region: 'Rural' },
+      { county: 'San Francisco', income: 140000, cs_rate: 8.4, region: 'Coastal' }
+    ];
+
+    const x = d3.scaleLinear()
+      .domain([60000, 150000])
+      .range([60, width - 40]);
+
+    const y = d3.scaleLinear()
+      .domain([0, 10])
+      .range([height - 40, 40]);
+
+    const color = d3.scaleOrdinal()
+      .domain(['Coastal', 'Inland', 'Rural'])
+      .range(['#2b8cbe', '#a1dab4', '#41b6c4']);
+
+    svg.append('g')
+      .attr('transform', `translate(0,${height - 40})`)
+      .call(d3.axisBottom(x).ticks(6).tickFormat(d3.format("$,.0f")));
+
+    svg.append('g')
+      .attr('transform', `translate(60,0)`)
+      .call(d3.axisLeft(y).ticks(5).tickFormat(d => d + '%'));
+
+    svg.selectAll('.point')
+      .data(data)
+      .join('circle')
+      .attr('class', 'point')
+      .attr('cx', d => x(d.income))
+      .attr('cy', d => y(d.cs_rate))
+      .attr('r', 6)
+      .attr('fill', d => color(d.region))
+      .append('title')
+      .text(d => `${d.county}\nIncome: $${d.income}\nCS Participation: ${d.cs_rate}%`);
+  </script>
+</body>
+</html>
