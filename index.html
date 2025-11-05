@@ -262,34 +262,70 @@
 <h1>Design Brief</h1>
 
 <h2>1. Dataset Choice</h2>
-<p>This project uses the <strong>“Factors Affecting University Student Grades”</strong> dataset from Kaggle (Atif Masih, 2023). It contains 10,000+ student records covering study hours, attendance, motivation, self-esteem, and parental background.</p>
-<p><strong>Source:</strong> <a href="https://www.kaggle.com/datasets/atifmasih/factors-affecting-university-student-grades">Factors Affecting University Student Grades (Kaggle)</a></p>
+<p>
+This project utilizes the <strong>“Factors Affecting University Student Grades”</strong> dataset from Kaggle (Atif Masih, 2023). 
+The dataset contains over <strong>10,000 student records</strong>, providing insights into how academic, social, and psychological factors influence performance. 
+Key features include study hours, attendance, family income, and behavioral indicators such as motivation, stress, and self-esteem.
+</p>
+<p>
+<strong>Source:</strong> 
+<a href="https://www.kaggle.com/datasets/atifmasih/factors-affecting-university-student-grades">
+Factors Affecting University Student Grades — Kaggle
+</a>
+</p>
 
 <h2>2. Research Question</h2>
-<p><strong>Do higher attendance and longer study hours correlate to better grades — and how do these relationships vary by gender and family income?</strong></p>
+<p>
+<strong>To what extent do study habits and attendance correlate with academic performance, and how do these relationships differ across gender and family income levels?</strong>
+</p>
+<p>
+This project explores whether <strong>consistent attendance</strong> and <strong>increased study time</strong> predict stronger academic outcomes, 
+while also examining how <strong>socioeconomic background</strong> and <strong>gender</strong> shape these results. 
+By visualizing these variables together, the project highlights the interplay between individual effort and systemic inequality in education.
+</p>
 
 <h2>3. Visual Concept</h2>
-<p>A <strong>scatterplot</strong> maps relationships between study habits and academic outcomes:</p>
+<p>
+A <strong>scatterplot</strong> visualization was selected to capture continuous relationships among multiple variables:
+</p>
 <ul>
-<li>X-axis: Study Hours</li>
-<li>Y-axis: Attendance (%)</li>
-<li>Color: Grade (red → green)</li>
-<li>Tooltips: show study hours, attendance, income, and grades</li>
-<li>Filters: Gender and Family Income Range</li>
+  <li><strong>X-axis:</strong> Study Hours</li>
+  <li><strong>Y-axis:</strong> Attendance (%)</li>
+  <li><strong>Color:</strong> Grade (Red → Green)</li>
+  <li><strong>Tooltip:</strong> Displays study hours, attendance, grade, gender, and family income</li>
+  <li><strong>Filters:</strong> Gender and Family Income Range</li>
 </ul>
+<p>
+This layout emphasizes clarity and multidimensional comparison, allowing users to explore how effort and opportunity intersect in academic achievement.
+</p>
 
 <h2>4. Interaction Concept</h2>
-<p>Hover reveals details on demand, sliders adjust study hours and income ranges, and gender filter toggles between male/female groups for comparison.</p>
+<p>
+The visualization includes several key interactive elements to encourage exploration:
+</p>
+<ul>
+  <li><strong>Hover Tooltips:</strong> Display individual student details, including attendance, grades, study hours, gender, and income.</li>
+  <li><strong>Gender and Income Filters:</strong> Allow users to isolate subgroups for targeted comparison.</li>
+  <li><strong>Study Hours Slider:</strong> Enables focused analysis of specific effort ranges.</li>
+</ul>
+<p>
+These controls make the visualization both approachable and informative. 
+Future enhancements could include regression trendlines, brushing, or zooming for deeper insight into dense clusters.
+</p>
 
 <h2>5. Design Inspirations</h2>
 <ul>
-<li><a href="https://observablehq.com/@d3/gallery">Observable D3 Gallery</a></li>
-<li><a href="https://www.benfry.com/zipdecode/">Ben Fry’s Zipdecode</a></li>
-<li><a href="https://namerology.com/baby-name-grapher/">Namerology Baby Name Grapher</a></li>
+  <li><a href="https://www.benfry.com/zipdecode/">Ben Fry — Zipdecode</a>: Demonstrates minimalist, intuitive data encoding.</li>
+  <li><a href="https://observablehq.com/@d3/gallery">Observable D3 Gallery</a>: Provided reference for scatterplot interactions and transitions.</li>
+  <li><a href="https://namerology.com/baby-name-grapher/">Namerology Baby Name Grapher</a>: Inspired the use of interactive filtering and storytelling through data.</li>
 </ul>
 
 <h2>6. Reflection</h2>
-<p>This project visualizes how effort, attendance, and socioeconomic background combine to influence academic outcomes — highlighting how both discipline and access shape educational achievement.</p>
+<p>
+This project visualizes the intersection of <strong>effort</strong>, <strong>opportunity</strong>, and <strong>outcome</strong> in education. 
+By combining study habits, attendance, and socioeconomic factors, it reveals that academic performance emerges from both individual discipline and structural context. 
+The minimalist design supports open-ended exploration, encouraging users to reflect on how <strong>equity</strong> and <strong>agency</strong> jointly shape student success.
+</p>
 
 </body>
 </html>
