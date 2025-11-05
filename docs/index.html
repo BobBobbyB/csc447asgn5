@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="generator" content="Observable Framework v1.13.3">
+<title>Interactive Visualization — Study Effort, Attendance, and Academic Performance | CS Brief</title>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,200..900;1,8..60,200..900&amp;display=swap" crossorigin>
+<link rel="preload" as="style" href="./_observablehq/theme-air,near-midnight.dcdbf18e.css">
+<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,200..900;1,8..60,200..900&amp;display=swap" crossorigin>
+<link rel="stylesheet" type="text/css" href="./_observablehq/theme-air,near-midnight.dcdbf18e.css">
+<link rel="modulepreload" href="./_observablehq/client.fc8551f4.js">
+<link rel="modulepreload" href="./_observablehq/runtime.e080113b.js">
+<link rel="modulepreload" href="./_observablehq/stdlib.73a8ec5a.js">
+<link rel="modulepreload" href="./_npm/d3@7.9.0/e780feca.js">
+<link rel="modulepreload" href="./_npm/d3-dsv@3.0.1/9cffc2bd.js">
+<link rel="modulepreload" href="./_npm/d3-array@3.2.4/e93ca09f.js">
+<link rel="modulepreload" href="./_npm/d3-axis@3.0.0/0f2de24d.js">
+<link rel="modulepreload" href="./_npm/d3-brush@3.0.0/65eb105b.js">
+<link rel="modulepreload" href="./_npm/d3-chord@3.0.1/7ef8fb2e.js">
+<link rel="modulepreload" href="./_npm/d3-color@3.1.0/aeb57b94.js">
+<link rel="modulepreload" href="./_npm/d3-contour@4.0.2/1d2aed74.js">
+<link rel="modulepreload" href="./_npm/d3-delaunay@6.0.4/5ced1d52.js">
+<link rel="modulepreload" href="./_npm/d3-dispatch@3.0.1/9ba9c7f3.js">
+<link rel="modulepreload" href="./_npm/d3-drag@3.0.0/4202580c.js">
+<link rel="modulepreload" href="./_npm/d3-ease@3.0.1/cdd7e898.js">
+<link rel="modulepreload" href="./_npm/d3-fetch@3.0.1/b4e2ad9a.js">
+<link rel="modulepreload" href="./_npm/d3-force@3.0.0/5e804d15.js">
+<link rel="modulepreload" href="./_npm/d3-format@3.1.0/86074ef6.js">
+<link rel="modulepreload" href="./_npm/d3-geo@3.1.1/40599fb3.js">
+<link rel="modulepreload" href="./_npm/d3-hierarchy@3.1.2/e49e792c.js">
+<link rel="modulepreload" href="./_npm/d3-interpolate@3.0.1/8d1e5425.js">
+<link rel="modulepreload" href="./_npm/d3-path@3.1.0/20d3f133.js">
+<link rel="modulepreload" href="./_npm/d3-polygon@3.0.1/7553081f.js">
+<link rel="modulepreload" href="./_npm/d3-quadtree@3.0.1/0dfd751c.js">
+<link rel="modulepreload" href="./_npm/d3-random@3.0.1/3c90ee06.js">
+<link rel="modulepreload" href="./_npm/d3-scale@4.0.2/843b6a76.js">
+<link rel="modulepreload" href="./_npm/d3-scale-chromatic@3.1.0/ba24c2e7.js">
+<link rel="modulepreload" href="./_npm/d3-selection@3.0.0/4d94e5b7.js">
+<link rel="modulepreload" href="./_npm/d3-shape@3.2.0/6d3a6726.js">
+<link rel="modulepreload" href="./_npm/d3-time@3.1.0/9f03c579.js">
+<link rel="modulepreload" href="./_npm/d3-time-format@4.1.0/07c9626f.js">
+<link rel="modulepreload" href="./_npm/d3-timer@3.0.1/b58a267d.js">
+<link rel="modulepreload" href="./_npm/d3-transition@3.0.1/004da2ac.js">
+<link rel="modulepreload" href="./_npm/d3-zoom@3.0.0/b5786b3f.js">
+<link rel="modulepreload" href="./_npm/internmap@2.0.3/e08981d9.js">
+<link rel="modulepreload" href="./_npm/delaunator@5.0.1/02d43215.js">
+<link rel="modulepreload" href="./_npm/robust-predicates@3.0.2/aa00730b.js">
+<script type="module">
+
+import {define} from "./_observablehq/client.fc8551f4.js";
+import {registerFile} from "./_observablehq/stdlib.73a8ec5a.js";
+
+registerFile("./data/student_grades.csv", {"name":"./data/student_grades.csv","mimeType":"text/csv","path":"./_file/data/student_grades.56e6528f.csv","lastModified":1762327132570,"size":1730281});
+
+define({id: "1c335db3", inputs: ["FileAttachment"], outputs: ["d3","data","gradeMap","svg","width","height","margin","g","tooltip","x","y","color","xAxis","yAxis","legendData","legend","update"], body: async (FileAttachment) => {
+const d3 = await import("./_npm/d3@7.9.0/e780feca.js");
+const data = await FileAttachment("./data/student_grades.csv").csv();
+
+// convert categorical grades to numeric scale
+const gradeMap = {
+  "A+": 100, "A": 95, "A-": 90,
+  "B+": 87, "B": 85, "B-": 80,
+  "C+": 77, "C": 75, "C-": 70,
+  "D": 65, "F": 50
+};
+
+data.forEach(d => {
+  d.Study_Hours = +d.Study_Hours;
+  d.Attendance = +d.Attendance;
+  d.Grades = gradeMap[d.Previous_Grades] || 0;
+  d.Family_Income = +d.Family_Income || 0;
+});
+
+console.log("Extent:", d3.extent(data, d => d.Attendance));
+console.log("Mean:", d3.mean(data, d => d.Attendance));
+console.log("Income Range:", d3.extent(data, d => d.Family_Income));
+
+const svg = d3.select("#chart");
+const width = +svg.attr("width");
+const height = +svg.attr("height");
+const margin = { top: 50, right: 60, bottom: 70, left: 80 };
+const g = svg.append("g").attr("transform", `translate(${margin.left},${margin.top})`);
+const tooltip = d3.select("#tooltip");
+
+// scales
+let x = d3.scaleLinear()
+  .domain([0, d3.max(data, d => d.Study_Hours) * 1.05])
+  .range([0, width - margin.left - margin.right]);
+
+let y = d3.scaleLinear()
+  .domain([0, d3.max(data, d => d.Attendance) * 1.05])
+  .range([height - margin.top - margin.bottom, 0]);
+
+const color = d3.scaleThreshold()
+  .domain([60, 70, 80, 90, 100])
+  .range(["#d73027", "#fc8d59", "#fee08b", "#d9ef8b", "#91cf60"]);
+
+const xAxis = g.append("g")
+  .attr("transform", `translate(0,${height - margin.top - margin.bottom})`)
+  .call(d3.axisBottom(x).ticks(10));
+xAxis.append("text")
+  .attr("x", (width - margin.left - margin.right) / 2)
+  .attr("y", 45)
+  .attr("fill", "black")
+  .attr("text-anchor", "middle")
+  .text("Study Hours");
+
+const yAxis = g.append("g").call(d3.axisLeft(y).ticks(10));
+yAxis.append("text")
+  .attr("x", -((height - margin.top - margin.bottom) / 2))
+  .attr("y", -55)
+  .attr("fill", "black")
+  .attr("text-anchor", "middle")
+  .attr("transform", "rotate(-90)")
+  .text("Attendance (%)");
+
+// legend
+const legendData = [
+  { grade: "F–D", color: "#d73027" },
+  { grade: "C", color: "#fc8d59" },
+  { grade: "B", color: "#fee08b" },
+  { grade: "A–", color: "#d9ef8b" },
+  { grade: "A+", color: "#91cf60" }
+];
+
+const legend = svg.append("g")
+  .attr("transform", `translate(${width - 260}, ${height - 45})`)
+  .attr("font-size", "0.8rem");
+
+legend.selectAll("rect")
+  .data(legendData)
+  .enter()
+  .append("rect")
+  .attr("x", (d, i) => i * 35)
+  .attr("width", 30)
+  .attr("height", 10)
+  .attr("fill", d => d.color);
+
+legend.selectAll("text")
+  .data(legendData)
+  .enter()
+  .append("text")
+  .attr("x", (d, i) => i * 35 + 15)
+  .attr("y", 22)
+  .attr("text-anchor", "middle")
+  .text(d => d.grade);
+
+legend.append("text")
+  .attr("x", 80)
+  .attr("y", -8)
+  .attr("text-anchor", "middle")
+  .attr("font-size", "0.9rem")
+  .text("Grades");
+
+// function
+function update(gender, minH, maxH, minI, maxI) {
+  const filtered = data.filter(d =>
+    (gender === "All" || d.Gender === gender) &&
+    !isNaN(d.Study_Hours) &&
+    !isNaN(d.Attendance) &&
+    d.Study_Hours >= minH && d.Study_Hours <= maxH &&
+    d.Family_Income >= minI && d.Family_Income <= maxI
+  );
+
+  const xExtent = d3.extent(filtered, d => d.Study_Hours);
+  const yMax = d3.max(filtered, d => d.Attendance);
+
+  if (xExtent[0] !== undefined && yMax !== undefined) {
+    x.domain([xExtent[0] - 0.5, xExtent[1] + 0.5]);
+    y.domain([0, yMax * 1.05]);
+    xAxis.transition().duration(600).call(d3.axisBottom(x).ticks(8));
+    yAxis.transition().duration(600).call(d3.axisLeft(y).ticks(8));
+  }
+
+  const circles = g.selectAll("circle").data(filtered, (d, i) => i);
+
+  circles.join(
+    enter => enter.append("circle")
+      .attr("cx", d => x(d.Study_Hours))
+      .attr("cy", d => y(d.Attendance) + (Math.random() - 0.5) * 5)
+      .attr("r", 5)
+      .attr("fill", d => color(d.Grades))
+      .attr("opacity", 0.85)
+      .attr("stroke", "#fff")
+      .attr("stroke-width", 0.6)
+      .on("mouseover", function(event, d) {
+        d3.select(this)
+          .transition().duration(100)
+          .attr("r", 8)
+          .attr("stroke-width", 1);
+
+        tooltip.transition().duration(100).style("opacity", 1);
+        tooltip.html(
+          `<strong>${d.Gender}</strong><br>
+           Grade: ${d.Previous_Grades}<br>
+           Study Hours: ${d.Study_Hours}<br>
+           Attendance: ${d.Attendance}%<br>
+           Income: $${d.Family_Income.toLocaleString()}`
+        );
+
+        const tooltipWidth = 180;
+        const tooltipHeight = 100;
+        const padding = 15;
+        let left = event.pageX + padding;
+        let top = event.pageY - tooltipHeight - 10;
+        const windowWidth = window.innerWidth;
+        const windowHeight = window.innerHeight;
+
+        if (left + tooltipWidth > windowWidth)
+          left = event.pageX - tooltipWidth - padding;
+        if (top < 0)
+          top = event.pageY + padding;
+        if (top + tooltipHeight > windowHeight)
+          top = windowHeight - tooltipHeight - 10;
+
+        tooltip.style("left", `${left}px`).style("top", `${top}px`);
+      })
+      .on("mouseout", function() {
+        d3.select(this)
+          .transition().duration(200)
+          .attr("r", 5)
+          .attr("stroke-width", 0.6);
+        tooltip.transition().duration(200).style("opacity", 0);
+      }),
+    update => update.transition().duration(400)
+      .attr("cx", d => x(d.Study_Hours))
+      .attr("cy", d => y(d.Attendance) + (Math.random() - 0.5) * 5)
+      .attr("fill", d => color(d.Grades)),
+    exit => exit.remove()
+  );
+}
+
+// initialize
+update("All", 0, 20, 0, d3.max(data, d => d.Family_Income));
+
+// controls
+d3.select("#genderFilter").on("change", function() {
+  update(
+    this.value,
+    +d3.select("#minHours").property("value"),
+    +d3.select("#maxHours").property("value"),
+    +d3.select("#minIncome").property("value"),
+    +d3.select("#maxIncome").property("value")
+  );
+});
+
+d3.selectAll("#minHours, #maxHours, #minIncome, #maxIncome").on("input", function() {
+  const minH = +d3.select("#minHours").property("value");
+  const maxH = +d3.select("#maxHours").property("value");
+  const minI = +d3.select("#minIncome").property("value");
+  const maxI = +d3.select("#maxIncome").property("value");
+  d3.select("#hourLabel").text(`(${minH}–${maxH})`);
+  d3.select("#incomeLabel").text(`($${minI.toLocaleString()}–$${maxI.toLocaleString()})`);
+  update(d3.select("#genderFilter").property("value"), minH, maxH, minI, maxI);
+});
+return {d3,data,gradeMap,svg,width,height,margin,g,tooltip,x,y,color,xAxis,yAxis,legendData,legend,update};
+}});
+
+</script>
+</head>
+<body>
+<input id="observablehq-sidebar-toggle" type="checkbox" title="Toggle sidebar">
+<label id="observablehq-sidebar-backdrop" for="observablehq-sidebar-toggle"></label>
+<nav id="observablehq-sidebar">
+  <ol>
+    <label id="observablehq-sidebar-close" for="observablehq-sidebar-toggle"></label>
+    <li class="observablehq-link observablehq-link-active"><a href="./">CS Brief</a></li>
+  </ol>
+  <ol>
+    <li class="observablehq-link"><a href="./example-dashboard">Example dashboard</a></li>
+    <li class="observablehq-link"><a href="./example-report">Example report</a></li>
+  </ol>
+</nav>
+<script>{const e=document.querySelector("#observablehq-sidebar"),o=document.querySelector("#observablehq-sidebar-toggle"),r=sessionStorage.getItem("observablehq-sidebar");r?o.checked=r==="true":o.indeterminate=!0;for(const t of document.querySelectorAll("#observablehq-sidebar summary")){const s=t.parentElement;switch(sessionStorage.getItem(`observablehq-sidebar:${t.textContent}`)){case"true":s.open=!0;break;case"false":s.classList.contains("observablehq-section-active")||(s.open=!1);break}}addEventListener("beforeunload",()=>sessionStorage.setItem("observablehq-sidebar-scrolly",`${e.scrollTop}`));const a=sessionStorage.getItem("observablehq-sidebar-scrolly");a!=null&&(e.style.cssText="overflow: hidden;",e.scrollTop=+a,e.style.cssText="");}</script>
+<div id="observablehq-center">
+<aside id="observablehq-toc" data-selector="h1:not(:first-of-type)[id], h2:first-child[id], :not(h1) + h2[id]">
+<nav>
+<div>Contents</div>
+<ol>
+<li class="observablehq-secondary-link"><a href="#design-brief">Design Brief</a></li>
+<li class="observablehq-secondary-link"><a href="#2-research-question">2. Research Question</a></li>
+<li class="observablehq-secondary-link"><a href="#3-visual-concept">3. Visual Concept</a></li>
+<li class="observablehq-secondary-link"><a href="#4-interaction-concept">4. Interaction Concept</a></li>
+<li class="observablehq-secondary-link"><a href="#5-design-inspirations">5. Design Inspirations</a></li>
+<li class="observablehq-secondary-link"><a href="#6-reflection">6. Reflection</a></li>
+</ol>
+</nav>
+</aside>
+<main id="observablehq-main" class="observablehq">
+<script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+<style>
+  body {
+    font-family: Inter, sans-serif;
+    margin: 2rem;
+    background-color: #fafafa;
+    color: #222;
+  }
+  svg {
+    background: white;
+    border: 1px solid #ddd;
+  }
+  select, input[type="range"] {
+    padding: 6px;
+    margin: 0.5rem;
+  }
+  .slider-container {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin-bottom: 1rem;
+  }
+  .tooltip {
+    position: absolute;
+    background: white;
+    border: 1px solid #ccc;
+    padding: 6px 8px;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    pointer-events: none;
+    opacity: 0;
+  }
+</style>
+<h1 id="how-do-study-time-and-attendance-relate-to-student-grades" tabindex="-1"><a class="observablehq-header-anchor" href="#how-do-study-time-and-attendance-relate-to-student-grades">How Do Study Time and Attendance Relate to Student Grades?</a></h1>
+<div class="controls">
+  <label><strong>Gender:</strong></label>
+  <select id="genderFilter">
+    <option value="All">All Genders</option>
+    <option value="M">Male</option>
+    <option value="F">Female</option>
+  </select>
+  <div class="slider-container">
+    <label><strong>Study Hours Range:</strong></label>
+    <input id="minHours" type="range" min="0" max="20" value="0">
+    <input id="maxHours" type="range" min="0" max="20" value="20">
+    <span id="hourLabel">(0–20)</span>
+  </div>
+  <div class="slider-container">
+  <label><strong>Family Income Range:</strong></label>
+  <input id="minIncome" type="range" min="0" max="150000" value="0">
+  <input id="maxIncome" type="range" min="0" max="150000" value="150000">
+  <span id="incomeLabel">($0–$150k)</span>
+</div>
+</div>
+<p><svg id="chart" width="800" height="550"></svg></p>
+<div class="tooltip" id="tooltip"></div>
+<div class="observablehq observablehq--block"><!--:1c335db3:--></div>
+<hr>
+<h1 id="design-brief" tabindex="-1"><a class="observablehq-header-anchor" href="#design-brief">Design Brief</a></h1>
+<h2 id="1-dataset-choice" tabindex="-1"><a class="observablehq-header-anchor" href="#1-dataset-choice">1. Dataset Choice</a></h2>
+<p>This project uses the <strong>“Factors Affecting University Student Grades”</strong> dataset from Kaggle (Atif Masih, 2023).<br>
+It contains 10,000+ student records, capturing a wide range of behavioral and contextual features including:</p>
+<ul>
+<li>Study hours, attendance, grades</li>
+<li>Psychological and social variables (motivation, stress, self-esteem)</li>
+<li>Learning style and parental background</li>
+</ul>
+<p><strong>Source:</strong><br>
+<a href="https://www.kaggle.com/datasets/atifmasih/factors-affecting-university-student-grades" target="_blank" rel="noopener noreferrer">Factors Affecting University Student Grades (Kaggle)</a></p>
+<hr>
+<h2 id="2-research-question" tabindex="-1"><a class="observablehq-header-anchor" href="#2-research-question">2. Research Question</a></h2>
+<p><strong>Do higher attendence and higher studying hours correlate to better grades, and how do these relationships vary by gender and family income?</strong></p>
+<p>This visualization explores whether <strong>consistent attendance</strong> and <strong>extended study time</strong> reliable predictors of <strong>strong academic outcomes</strong> actually matters on if students do well in school or not. It also investigates whether <strong>socioeconomic backgrounds</strong> or <strong>gender</strong> influences these correlations, revealing patterns of both effort and equity in <strong>educational success</strong>.</p>
+<hr>
+<h2 id="3-visual-concept" tabindex="-1"><a class="observablehq-header-anchor" href="#3-visual-concept">3. Visual Concept</a></h2>
+<p>A <strong>scatterplot</strong> was chosen to map continuous relationships:</p>
+<ul>
+<li><strong>X-axis:</strong> Study Hours</li>
+<li><strong>Y-axis:</strong> Attendance (%)</li>
+<li><strong>Color:</strong> Grade (Red -&gt; Green)</li>
+<li><strong>Point Size:</strong> (maybe): Student Grade or Performance Score</li>
+<li><strong>Tooltip:</strong> Displays study hours, attendance, grade, gender, and income level</li>
+<li><strong>Dropdown Filter:</strong> Allows users to toggle between gender groups (All, Male, Female)</li>
+</ul>
+<p>This configuration provides an intuitive, continuous mapping of behavioral effort against performance while minimizing cognitive load and visual clutter.</p>
+<hr>
+<h2 id="4-interaction-concept" tabindex="-1"><a class="observablehq-header-anchor" href="#4-interaction-concept">4. Interaction Concept</a></h2>
+<p>The visualization includes two core interactions:</p>
+<ul>
+<li>Hover Tooltips: Provide “details on demand,” showing each student’s study hours, attendance, grade, gender, and family income.</li>
+<li>Dropdown Filter: Allows users to switch between male, female, and all students, enabling side-by-side comparison of behavioral and performance patterns across genders.</li>
+</ul>
+<p>Future extensions could include:</p>
+<ul>
+<li>Filtering by income group</li>
+<li>Adding regression trendlines per gender</li>
+<li>Light zoom/pan capabilities for dense clusters</li>
+<li>These interactions prioritize simplicity while still enabling meaningful exploration of correlations and subgroup differences.</li>
+</ul>
+<hr>
+<h2 id="5-design-inspirations" tabindex="-1"><a class="observablehq-header-anchor" href="#5-design-inspirations">5. Design Inspirations</a></h2>
+<ul>
+<li><a href="https://www.benfry.com/zipdecode/" target="_blank" rel="noopener noreferrer">Ben Fry — Zipdecode</a>: for geographic encoding simplicity and minimalist interaction.</li>
+<li><a href="https://observablehq.com/@d3/gallery" target="_blank" rel="noopener noreferrer">Observable Plot D3 Scatter</a>: inspiration for data-driven visual mappings.</li>
+<li><a href="https://namerology.com/baby-name-grapher/" target="_blank" rel="noopener noreferrer">Namerology Baby Name Grapher</a>: reference for interactive filtering and storytelling through quantitative visuals.</li>
+</ul>
+<hr>
+<h2 id="6-reflection" tabindex="-1"><a class="observablehq-header-anchor" href="#6-reflection">6. Reflection</a></h2>
+<p>This design visualizes the intersection of <strong>effort</strong>, <strong>opportunity</strong>, and <strong>outcome</strong>.
+By mapping study habits and attendance alongside economic background and gender, it reveals how both <strong>individual behavior</strong> and <strong>structural factors</strong> shape academic performance.
+The simple interactive controls foster open-ended exploration, allowing users to form their own insights into the balance between <strong>discipline</strong>, <strong>equity</strong>, and <strong>achievement</strong> in education.</p>
+<hr>
+</main>
+<footer id="observablehq-footer">
+<nav><a rel="next" href="./example-dashboard"><span>Example dashboard</span></a></nav>
+<div>Built with <a href="https://observablehq.com/" target="_blank" rel="noopener noreferrer">Observable</a> on <a title="2025-11-05T02:23:42">Nov 5, 2025</a>.</div>
+</footer>
+</div>
+</body>
+</html>
