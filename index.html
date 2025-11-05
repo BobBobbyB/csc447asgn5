@@ -320,12 +320,88 @@ Future enhancements could include regression trendlines, brushing, or zooming fo
   <li><a href="https://namerology.com/baby-name-grapher/">Namerology Baby Name Grapher</a>: Inspired the use of interactive filtering and storytelling through data.</li>
 </ul>
 
-<h2>6. Reflection</h2>
+<h2>6. Write-Up</h2>
 <p>
-This project visualizes the intersection of <strong>effort</strong>, <strong>opportunity</strong>, and <strong>outcome</strong> in education. 
-By combining study habits, attendance, and socioeconomic factors, it reveals that academic performance emerges from both individual discipline and structural context. 
-The minimalist design supports open-ended exploration, encouraging users to reflect on how <strong>equity</strong> and <strong>agency</strong> jointly shape student success.
+    This visualization was designed to explore how <strong>study habits, attendance,</strong> 
+    and <strong>family income</strong> relate to student performance. 
+    I chose a <strong>scatterplot</strong> because it naturally represents relationships 
+    between two continuous variables (study hours and attendance). 
+    Each point corresponds to a student, allowing the viewer to see both overall patterns 
+    and individual variation.
 </p>
+
+<p>
+    <strong>Color</strong> encodes grades, ranging from red (low) to green (high), leveraging 
+    intuitive associations between hue and performance quality. 
+    Interactive filtering by <strong>gender</strong>, <strong>study-hour range</strong>, 
+    and <strong>family income</strong> was added to enable deeper exploration. 
+    A subtle hover zoom effect makes hovered points expand slightly, 
+    helping distinguish them in dense clusters. 
+    The double-filter system allows users to isolate specific groups 
+    to see how socioeconomic or behavioral factors affect academic outcomes. 
+    This design supports both overview and detail-on-demand interaction, 
+    following Shneiderman’s visualization mantra: 
+    <em>“Overview first, zoom and filter, then details on demand.”</em>
+</p>
+
+<p>
+    Initially, I considered encoding <strong>family income</strong> as color 
+    and <strong>grades</strong> as bubble size, 
+    but this approach made it harder to interpret performance patterns at a glance. 
+    I also experimented with a heatmap and small-multiples layout 
+    (e.g., comparing low- vs. high-income groups), 
+    but interactive sliders achieved similar clarity with less visual clutter. 
+    The final design prioritizes <strong>readability</strong> and 
+    <strong>exploratory flexibility</strong>.
+</p>
+
+<p>
+    The dataset was derived from a synthetic “Student Academic Factors” dataset 
+    frequently used in educational data-mining research and public repositories such as Kaggle. 
+    Data columns include <strong>Study_Hours</strong>, <strong>Attendance</strong>, 
+    <strong>Family_Income</strong>, <strong>Gender</strong>, and <strong>Previous_Grades</strong>. 
+    External references and inspiration used during development include:
+</p>
+
+<ul>
+    <li><a href="https://d3js.org" target="_blank">D3.js Official Documentation</a></li>
+    <li><a href="https://observablehq.com/@d3/scatterplot" target="_blank">Observable D3 Examples (Scatterplot & Legend Patterns)</a></li>
+    <li>Shneiderman, B. (1996). <em>The Eyes Have It: A Task by Data Type Taxonomy for Information Visualizations</em>. IEEE Symposium on Visual Languages.</li>
+    <li>Color palette inspiration from <a href="https://colorbrewer2.org" target="_blank">ColorBrewer</a> (Sequential Red-Yellow-Green Scheme)</li>
+</ul>
+
+<p>
+    <strong>Development Process:</strong><br>
+    The project was completed individually over several sessions (approximately 10–12 hours total):
+</p>
+
+<ul>
+    <li><strong>Data Preparation & Exploration (~1 hour):</strong> Cleaned CSV data, mapped categorical grades to numeric values, and verified ranges.</li>
+    <li><strong>Base Visualization Setup (~2 hours):</strong> Built the D3 scatterplot, axes, and responsive scaling system.</li>
+    <li><strong>Interactivity & Filtering (~4 hours):</strong> Implemented dropdown and slider filters for gender, study hours, and income, along with dynamic axis rescaling.</li>
+    <li><strong>Polish & Refinement (2–3 hours):</strong> Adjusted legend placement, tooltips, color encoding, and hover behavior for usability.</li>
+</ul>
+
+<p>
+    The most time-consuming aspect was debugging interactivity to ensure filters updated both data and axes smoothly. 
+    Tooltip behavior also required careful handling to prevent pop-ups from leaving the viewport. 
+    Dynamic rescaling after filtering was particularly important for maintaining visual clarity 
+    when focusing on smaller subsets of data.
+</p>
+
+<p>
+    This project demonstrates how <strong>interactive filtering</strong> and 
+    <strong>thoughtful visual encoding</strong> can reveal subtle relationships in data. 
+    Attendance values tended to cluster above 70%, limiting some variation, 
+    but overall the visualization effectively highlights complex patterns between study effort, 
+    income, and performance. 
+    In my interpretation, there appears to be <strong>no strong correlation</strong> 
+    between attendance or study hours and final grades, 
+    challenging assumptions about academic effort. 
+    The final result balances aesthetic simplicity with analytical depth, 
+    making it suitable for both educational research and classroom exploration.
+</p>
+
 
 </body>
 </html>
